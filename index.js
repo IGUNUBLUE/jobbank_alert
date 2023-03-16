@@ -57,14 +57,15 @@ function generateJobs(data) {
 async function start() {
   console.log('########### scraper process started ###########')
   const missingPages = []
+  const axiosConfig = {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+    }
+  }
 
   try {
-    const firstRes = await axios.get(paginationGenerator(), {
-      headers: {
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-      }
-    })
+    const firstRes = await axios.get(paginationGenerator(), axiosConfig)
 
     const $ = cheerio.load(firstRes.data)
     const jobPerPage = $('.results-jobs').find("[id*='article-']").length
@@ -83,12 +84,10 @@ async function start() {
             (index / totalPages) * 100
           )}% of 100% ###########`
         )
-        const { data } = await axios.get(paginationGenerator(index), {
-          headers: {
-            'User-Agent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
-          }
-        })
+        const { data } = await axios.get(
+          paginationGenerator(index),
+          axiosConfig
+        )
 
         missingPages.push(data)
       }
