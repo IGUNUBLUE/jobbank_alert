@@ -37,7 +37,6 @@ async function processJobs() {
       const newJobs = scrapedJobs.filter(({ id: idScrapedJob }) => {
         return !oldJobs.find(({ id: idOlsJob }) => idScrapedJob === idOlsJob)
       })
-      console.log('🚀 ~ file: processJobs.js:41 ~ newJobs ~ newJobs', newJobs)
 
       fs.truncate(dbDir, 0, (err) => {
         if (err) throw err
