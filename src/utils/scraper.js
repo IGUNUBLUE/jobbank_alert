@@ -8,9 +8,7 @@ function paginationGenerator(pageNum = 1) {
 }
 
 function generateDetailsLink(id) {
-  return `https://www.jobbank.gc.ca/jobsearch/jobpostingtfw/${
-    id.split('-')[1]
-  }?source=searchresults`
+  return `https://www.jobbank.gc.ca/jobsearch/jobpostingtfw/${id}?source=searchresults`
 }
 
 function applyTrim(text) {
