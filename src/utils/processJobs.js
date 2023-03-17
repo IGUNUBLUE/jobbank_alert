@@ -1,18 +1,18 @@
 const fs = require('fs')
 const path = require('path')
 
-// const startScraper = require('./scraper')
+const startScraper = require('./scraper')
 const { Bot } = require('../lib/telegrafBot')
 const { channelLogsId } = require('../config')
 const { errorLog } = require('../messages')
 const oldJobs = require('../db/old_scrapedJobs.json')
 const dbDir = path.join(__dirname, '..', 'db/old_scrapedJobs.json')
-const falseScrapedJobs = require('../db/falseScraped.json')
+// const falseScrapedJobs = require('../db/falseScraped.json')
 
 async function processJobs() {
   try {
-    // const scrapedJobs = await startScraper()
-    const scrapedJobs = falseScrapedJobs
+    const scrapedJobs = await startScraper()
+    // const scrapedJobs = falseScrapedJobs
 
     if (!Array.isArray(scrapedJobs)) {
       throw new Error('Not scraper elements')

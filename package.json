@@ -4,6 +4,7 @@
   "description": "A bot to notify new jobs from job-bank Canada",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "prepare": "husky install"
   },
   "keywords": [],

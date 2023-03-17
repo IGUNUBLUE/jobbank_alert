@@ -1,4 +1,4 @@
-// const cron = require('node-cron')
+const cron = require('node-cron')
 
 const { Markup, Bot } = require('./src/lib/telegrafBot')
 const { channelId, channelLogsId } = require('./src/config')
@@ -6,6 +6,7 @@ const { newJob, notFoundJobs } = require('./src/messages')
 const processJobs = require('./src/utils/processJobs')
 
 async function sendInfo() {
+  console.log('################ App stated')
   const newJobs = await processJobs()
 
   if (Array.isArray(newJobs)) {
@@ -49,6 +50,5 @@ async function sendInfo() {
   return null
 }
 
-// cron.schedule('0 8,14 * * *', () => sendInfo())
-// cron.schedule('*/1 * * * *', () => sendInfo())
-sendInfo()
+cron.schedule('0 8,14 * * *', () => sendInfo())
+// sendInfo()
