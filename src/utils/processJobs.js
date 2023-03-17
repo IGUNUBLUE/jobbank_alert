@@ -2,6 +2,9 @@ const fs = require('fs')
 const path = require('path')
 
 // const startScraper = require('./scraper')
+const { Bot } = require('../lib/telegrafBot')
+const { channelLogsId } = require('../config')
+const { errorLog } = require('../messages')
 const oldJobs = require('../db/old_scrapedJobs.json')
 const dbDir = path.join(__dirname, '..', 'db/old_scrapedJobs.json')
 const falseScrapedJobs = require('../db/falseScraped.json')
@@ -41,6 +44,10 @@ async function processJobs() {
 
     return newJobs
   } catch (err) {
+    Bot.telegram.sendMessage(channelLogsId, errorLog, {
+      parse_mode: 'HTML'
+    })
+
     return console.log(err)
   }
 }

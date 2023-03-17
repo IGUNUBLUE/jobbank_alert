@@ -7,5 +7,6 @@ module.exports = {
 <b>Salary:</b>  ${salary}
 <b>State:</b>  ${verified || 'No verified'}
 `,
-  notFoundJobs: '<b>No found new jobs</b>'
+  notFoundJobs: '<b>No found new jobs</b>',
+  errorLog: '<b>Found error</b>'
 }

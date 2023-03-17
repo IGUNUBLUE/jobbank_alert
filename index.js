@@ -42,7 +42,7 @@ async function sendInfo() {
     return null
   }
 
-  Bot.telegram.sendMessage(channelLogsId, notFoundJobs, {
+  await Bot.telegram.sendMessage(channelLogsId, notFoundJobs, {
     parse_mode: 'HTML'
   })
 

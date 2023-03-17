@@ -1,6 +1,10 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 
+const { Bot } = require('../lib/telegrafBot')
+const { channelLogsId } = require('../config')
+const { errorLog } = require('../messages')
+
 const allJobs = []
 
 function paginationGenerator(pageNum = 1) {
@@ -107,6 +111,9 @@ async function startScraper() {
     return allJobs
   } catch (err) {
     console.error(err.message)
+    Bot.telegram.sendMessage(channelLogsId, errorLog, {
+      parse_mode: 'HTML'
+    })
 
     return null
   }
