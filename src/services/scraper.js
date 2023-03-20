@@ -24,8 +24,14 @@ function createArticules({ pagesData }) {
 
     unprocessedJobs.each((_, job) => {
       const articleId = $(job).attr('id').split('-')[1]
-      const position = $(job)
+      const location = $(job)
         .find('a ul li.location')
+        .contents()
+        .filter((_, el) => el.nodeType === 3)
+        .text()
+        .trim()
+      const position = $(job)
+        .find('a h3 span.noctitle')
         .contents()
         .filter((_, el) => el.nodeType === 3)
         .text()
@@ -36,6 +42,7 @@ function createArticules({ pagesData }) {
       articules.push({
         articleId,
         position,
+        location,
         business,
         linkDetails
       })
@@ -73,7 +80,13 @@ async function getMissingPages({ totalPages, firstPage }) {
   }
 }
 
-async function getJobDetails({ articleId, position, linkDetails, business }) {
+async function getJobDetails({
+  articleId,
+  position,
+  linkDetails,
+  business,
+  location
+}) {
   try {
     const jobDetails = {}
     const { data } = await axios.get(linkDetails, axiosConfig)
@@ -100,9 +113,6 @@ async function getJobDetails({ articleId, position, linkDetails, business }) {
           .trim()
           .toLowerCase()
 
-        if (text.includes('location')) {
-          jobDetails.location = text.split('location')[1]
-        }
         if (text.includes('salary')) {
           jobDetails.salary = text.split('salary')[1]
         }
@@ -122,7 +132,7 @@ async function getJobDetails({ articleId, position, linkDetails, business }) {
           jobDetails.jobBankId = text.split('#')[1]
         }
       })
-
+    jobDetails.location = location
     jobDetails.position = position
     jobDetails.articleId = articleId
     jobDetails.linkDetails = linkDetails
