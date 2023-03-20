@@ -57,4 +57,6 @@ async function sendInfo() {
   }
 }
 
-cron.schedule('0 8 * * *', () => sendInfo())
+cron.schedule('0 8 * * *', () =>
+  sendInfo().finally(() => console.log('Finish cron job'))
+)
