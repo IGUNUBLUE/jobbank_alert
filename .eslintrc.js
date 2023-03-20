@@ -9,5 +9,5 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  rules: { 'space-before-function-paren': ['error', 'never'] }
+  rules: { 'space-before-function-paren': 'off' }
 }

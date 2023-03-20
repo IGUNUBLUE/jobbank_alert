@@ -1,12 +1,25 @@
 module.exports = {
-  newJob: ({ verified, title, date, business, location, salary }) => `
-<b>Position:</b>  ${title}
-<b>Date:</b>  ${date}
-<b>Company:</b>  ${business}
+  newJob: ({
+    position,
+    postDate,
+    startDate,
+    business,
+    location,
+    salary,
+    employmentType,
+    vacancies,
+    status,
+    advertisedUntilDate
+  }) => `
+<b>Position:</b>  ${position}
+<b>Post on:</b>  ${postDate}
+<b>Business:</b>  ${business}
 <b>Location:</b>  ${location}
 <b>Salary:</b>  ${salary}
-<b>State:</b>  ${verified || 'No verified'}
-`,
-  notFoundJobs: '<b>No found new jobs</b>',
-  errorLog: '<b>Found error</b>'
+<b>Status:</b>  ${status || 'No verified'}
+<b>Vacancies:</b>  ${vacancies}
+<b>Contract type:</b>  ${employmentType}
+<b>Start date:</b>  ${startDate}
+<b>Advertised until:</b>  ${advertisedUntilDate}
+`
 }

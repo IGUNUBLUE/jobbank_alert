@@ -1,54 +1,60 @@
 const cron = require('node-cron')
 
-const { Markup, Bot } = require('./src/lib/telegrafBot')
-const { channelId, channelLogsId } = require('./src/config')
-const { newJob, notFoundJobs } = require('./src/messages')
-const processJobs = require('./src/utils/processJobs')
+const { newJob } = require('./src/messages')
+const processJobs = require('./src/services/processJobs')
+const errorLog = require('./src/services/logs/errorLog')
+const warningLog = require('./src/services/logs/warningLog')
+const newJobNotification = require('./src/services/notifications/newJob')
+const successLog = require('./src/services/logs/successLog')
 
 async function sendInfo() {
-  console.log('################ App stated')
-  const newJobs = await processJobs()
+  try {
+    const newJobs = await processJobs()
 
-  if (Array.isArray(newJobs)) {
-    newJobs.forEach(
-      // eslint-disable-next-line space-before-function-paren
-      async ({
-        linkDetails,
-        verified,
-        title,
-        date,
-        business,
-        location,
-        salary
-      }) => {
-        const message = newJob({
-          verified,
-          title,
-          date,
+    if (Array.isArray(newJobs)) {
+      for (const job of newJobs) {
+        const {
+          position,
+          postDate,
+          startDate,
           business,
           location,
-          salary
-        })
-        const buttonUrl = Markup.button.url('🔗 Apply now', `${linkDetails}`)
+          salary,
+          employmentType,
+          vacancies,
+          status,
+          advertisedUntilDate,
+          linkDetails
+        } = job
 
-        await Bot.telegram.sendMessage(channelId, message, {
-          parse_mode: 'HTML',
-          reply_markup: {
-            inline_keyboard: [[buttonUrl]]
-          }
+        const message = newJob({
+          position,
+          postDate,
+          startDate,
+          business,
+          location,
+          salary,
+          employmentType,
+          vacancies,
+          status,
+          advertisedUntilDate
         })
+
+        await newJobNotification({ message, linkDetails })
       }
-    )
+
+      return successLog()
+    }
+
+    warningLog({
+      message: '<b>Could not process the jobs</b>',
+      functionName: 'sendInfo'
+    })
 
     return null
+  } catch (err) {
+    errorLog({ err, functionName: 'sendInfo' })
   }
-
-  await Bot.telegram.sendMessage(channelLogsId, notFoundJobs, {
-    parse_mode: 'HTML'
-  })
-
-  return null
 }
 
-cron.schedule('0 8,14 * * *', () => sendInfo())
-// sendInfo()
+cron.schedule('0 8 * * *', () => sendInfo())
