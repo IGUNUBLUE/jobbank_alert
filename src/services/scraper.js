@@ -38,8 +38,17 @@ function createArticules({ pagesData }) {
         .trim()
       const linkDetails = `https://www.jobbank.gc.ca/jobsearch/jobpostingtfw/${articleId}?source=searchresults`
       const business = $(job).find('a ul li.business').text().trim()
+      const salary = $(job)
+        .find('a ul li.salary')
+        .contents()
+        .filter((_, el) => el.nodeType === 3)
+        .text()
+        .trim()
+        .split('Salary:')[1]
+        .trim()
 
       articules.push({
+        salary,
         articleId,
         position,
         location,
@@ -85,7 +94,8 @@ async function getJobDetails({
   position,
   linkDetails,
   business,
-  location
+  location,
+  salary
 }) {
   try {
     const jobDetails = {}
@@ -113,9 +123,6 @@ async function getJobDetails({
           .trim()
           .toLowerCase()
 
-        if (text.includes('salary')) {
-          jobDetails.salary = text.split('salary')[1]
-        }
         if (text.includes('terms of employment')) {
           jobDetails.employmentType = text.split('terms of employment')[1]
         }
@@ -132,6 +139,8 @@ async function getJobDetails({
           jobDetails.jobBankId = text.split('#')[1]
         }
       })
+
+    jobDetails.salary = salary
     jobDetails.location = location
     jobDetails.position = position
     jobDetails.articleId = articleId

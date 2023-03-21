@@ -20,7 +20,7 @@ async function processJobs() {
     let counter = 1
     for (const scrapedJob of scrapedJobs) {
       console.log(`Processing ${counter} of ${scrapedJobs.length}`)
-      const { articleId, position, linkDetails, business, location } =
+      const { articleId, position, linkDetails, business, location, salary } =
         scrapedJob
       const found = await JobsModel.findOne({
         articleId: scrapedJob.articleId
@@ -32,8 +32,12 @@ async function processJobs() {
           position,
           articleId,
           business,
-          location
+          location,
+          salary
         })
+
+        if (!job) throw new Error(`Could not process this job: ${articleId}`)
+
         const fullJob = {
           jobBankId: job.jobBankId || 'unknown',
           articleId: job.articleId || 'unknown',
@@ -63,7 +67,7 @@ async function processJobs() {
     return newJobs
   } catch (err) {
     errorLog({ err, functionName: 'processJobs' })
-
+    await disconnect()
     return null
   }
 }

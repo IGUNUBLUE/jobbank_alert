@@ -20,7 +20,7 @@ async function sendInfo() {
           business,
           location,
           salary,
-          employmentType,
+          // employmentType,
           vacancies,
           status,
           advertisedUntilDate,
@@ -34,7 +34,7 @@ async function sendInfo() {
           business,
           location,
           salary,
-          employmentType,
+          // employmentType,
           vacancies,
           status,
           advertisedUntilDate

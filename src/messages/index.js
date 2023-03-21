@@ -6,7 +6,6 @@ module.exports = {
     business,
     location,
     salary,
-    employmentType,
     vacancies,
     status,
     advertisedUntilDate
@@ -18,7 +17,6 @@ module.exports = {
 <b>Salary:</b>  ${salary}
 <b>Status:</b>  ${status || 'No verified'}
 <b>Vacancies:</b>  ${vacancies}
-<b>Contract type:</b>  ${employmentType}
 <b>Start date:</b>  ${startDate}
 <b>Advertised until:</b>  ${advertisedUntilDate}
 `
